@@ -3,10 +3,10 @@ from config import db
 class Book(db.Model):
     __tablename__='BOOK'
 
-    idBook=db.Column(db.Integer,primary_key=True)
+    idBook=db.Column(db.Integer,primary_key=True,autoincrement=True)
     title = db.Column(db.String(100), nullable=False)
     pageCount = db.Column(db.Integer, nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    description = db.Column(db.String(1024), nullable=False)
     idAuthor = db.Column(db.Integer, db.ForeignKey('AUTHOR.idAuthor'), nullable=False)
 
     author = db.relationship('Author', backref='books')
@@ -33,18 +33,24 @@ class Book(db.Model):
 class Author(db.Model):
     __tablename__ = 'AUTHOR'
 
-    idAuthor = db.Column(db.Integer, primary_key=True)
+    idAuthor = db.Column(db.Integer, primary_key=True,autoincrement=True)
     lastName = db.Column(db.String(20), nullable=False)
     name = db.Column(db.String(20), nullable=False)
 
     def __repr__(self):
         return f'<Author {self.name} {self.lastName}>'
     
+    def to_json(self):
+        return{
+            "idAuthor": self.idAuthor,
+            "name": self.name,
+            "lastName": self.lastName
+        }
 
 class User(db.Model):
     __tablename__ = 'USER'
 
-    idUser = db.Column(db.Integer, primary_key=True)
+    idUser = db.Column(db.Integer, primary_key=True,autoincrement=True)
     username = db.Column(db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
 
@@ -63,7 +69,7 @@ class Book_User(db.Model):
 class Review(db.Model):
     __tablename__ = 'REVIEW'
 
-    idReview = db.Column(db.Integer, primary_key=True)
+    idReview = db.Column(db.Integer, primary_key=True,autoincrement=True)
     idBook = db.Column(db.Integer, db.ForeignKey('BOOK.idBook'), nullable=False)
     idUser = db.Column(db.Integer, db.ForeignKey('USER.idUser'), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
