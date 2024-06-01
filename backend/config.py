@@ -15,5 +15,5 @@ app.config['SECRET_KEY'] = 'FUNKCIONALNOPROGRAMIRANJEIRBP'
 
 db=SQLAlchemy(app)
 
-import controller.bookController,controller.userController,controller.authorController
+import controller.bookController,controller.userController,controller.authorController,controller.bookUserController,controller.reviewController
 
