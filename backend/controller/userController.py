@@ -36,11 +36,18 @@ def Login():
          return jsonify({'error': 'Wrong username or password'})
     session['idUser']=user.idUser
     session['username']=user.username
-    return jsonify({'message':'success'})
 
+    return jsonify({'message':'success'})
+    
 
 @app.route('/logout',methods=['GET'])
 def Logout():
     session.clear()
     return jsonify({'message': 'Logout successful'})
+
+@app.route('/check-session',methods=['GET'])
+def CheckSession():
+    if(session.get('username')):
+        return jsonify({'username':session['username']})
+    return jsonify({'error':'Session has expired'})
     

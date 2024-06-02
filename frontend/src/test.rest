@@ -1,0 +1,11 @@
+###login
+GET http://127.0.0.1:5000/check-session  
+
+###fef
+POST http://127.0.0.1:5000/login
+Content-Type:  application/json
+
+{
+    "username":"joca",
+    "password":"joca2002"
+}
