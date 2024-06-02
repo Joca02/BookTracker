@@ -1,18 +1,15 @@
-import { Box } from "@mui/material"
-import { useEffect } from "react"
-import { checkSession } from "./checkSession"
-import { useNavigate } from "react-router-dom"
-import axios from "axios"
-import Navigation from "./Navigation"
+import { Box } from "@mui/material";
+import Navigation from "./Navigation";
+import TableBooks from "./TableBooks";
 
-const Home=()=>{
+const Home = ({ session, setSession, usr, idUsr }) => {
+  return (
+    <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
+      <Navigation session={session} setSession={setSession} usr={usr} idUsr={idUsr} />
+      <br />
+      <TableBooks />
+    </Box>
+  );
+};
 
-    
-    return (
-        <Box display="flex" justifyContent="center" alignItems="center">
-            <Navigation/>
-        </Box>
-    )
-}
-
-export default Home
+export default Home;

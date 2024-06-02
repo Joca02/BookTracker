@@ -1,52 +1,40 @@
-import { AppBar, Toolbar, Typography, TextField, Button, Box } from "@mui/material";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useEffect,useState } from "react";
-import { checkSession } from "./checkSession";
-import axios from "axios";
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-const Navigation = () => {
+const Navigation = ({ session, setSession, usr }) => {
+  const navigate = useNavigate();
 
-    const [username,setUsername]=useState('')
-    const navigate=useNavigate()
-    // useEffect(()=>{
-    //     const checkSession=async()=>{
-    //         let response=await axios.get('http://127.0.0.1:5000/check-session')
-    //         console.log(response.data)
-    //         if(response.data['username'])
-    //             setUsername(response.data['username'])
-    //         else navigate('/')
-    //     }
-    //     checkSession()
-    // },[])
-
-    const logOut=async()=>{
-        // let response=await axios.get('http://127.0.0.1:5000/logout')
-        // navigate('/')                
+  useEffect(() => {
+    if (!session) {
+      navigate('/');
     }
+  }, [session, navigate]);
+
+  const handleLogout = () => {
+    setSession(false);
+    localStorage.removeItem('session');
+    localStorage.removeItem('usr');
+    localStorage.removeItem('idUsr');
+    navigate('/');
+  };
+
   return (
-    <AppBar position="static" sx={{width:'50%',backgroundColor:'wheat'}} >
-      <Toolbar >
+    <AppBar position="static" sx={{ width: '1100px', backgroundColor: 'wheat' }}>
+      <Toolbar>
         <Box display="flex" justifyContent="center" alignItems="center" width="100%">
-          <Typography variant="h6" component={Link} to="/home" color="inherit" style={{ textDecoration: 'none', marginRight: '20px' ,color:'brown'}}>
+          <Typography variant="h6" component={Link} to="/home" color="inherit" style={{ textDecoration: 'none', marginRight: '50px', color: 'brown' }}>
             Home
           </Typography>
-          <Typography variant="h6" component={Link} to="/my-library" color="inherit" style={{ textDecoration: 'none', marginRight: '20px',color:'brown' }}>
+          <Typography variant="h6" component={Link} to="/my-library" color="inherit" style={{ textDecoration: 'none', marginRight: '50px', color: 'brown' }}>
             My Library
           </Typography>
-          <TextField
-            label="Search"
-            variant="outlined"
-            size="small"
-            style={{ width: '100%', maxWidth: '300px', marginRight: '90px',marginLeft:'50px' }}
-          />
-          <Typography>{username}</Typography>
-          <Button variant="outlined" color="error" onClick={e=>logOut()}>
+          <Typography sx={{ mr: '50px', color: '#a1858c' }}>Logged as: {usr}</Typography>
+          <Button variant="outlined" color="error" onClick={handleLogout}>
             Log Out
           </Button>
         </Box>
       </Toolbar>
-      <button onClick={()=>checkSession()}>wqewwqe</button>
     </AppBar>
   );
 };

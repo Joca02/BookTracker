@@ -18,12 +18,15 @@ def Register():
         #return newUser.idUser
         db.session.add(newUser)
         db.session.commit()
-        return jsonify({'message':'success'})
+        return jsonify({
+            'message':'Registration was comnplete'
+            })
     except IntegrityError as e:
         db.session.rollback()
         return jsonify({'error':'Insertion failed {}'.format(str(e))}),500
     
 
+#vraca error poruku ako je fail ili id+username ako je uspesno
 @app.route('/login',methods=['POST'])
 def Login():
     data=request.get_json()
@@ -37,7 +40,11 @@ def Login():
     session['idUser']=user.idUser
     session['username']=user.username
 
-    return jsonify({'message':'success'})
+    return jsonify(
+        {
+            'username':user.username,
+            'idUser':user.idUser
+        })
     
 
 @app.route('/logout',methods=['GET'])

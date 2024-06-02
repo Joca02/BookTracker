@@ -9,7 +9,7 @@ from sqlalchemy import text
 def AddToLibary():
     data=request.get_json()
     idBook=data['idBook']
-    idUser=session['idUser']
+    idUser=data['idUser']
     if not idBook or not idUser:
             return jsonify({'error': 'Missing idBook or idUser'}), 400
     
@@ -27,7 +27,7 @@ def AddToLibary():
 def RemoveFromLibary():
     data=request.get_json()
     idBook=data['idBook']
-    idUser=session['idUser']
+    idUser=data['idUser']
     if not idBook or not idUser:
             return jsonify({'error': 'Missing idBook or idUser'}), 400
     try:

@@ -41,7 +41,7 @@ def addBook():
             'idAuthor': idAuthor
         })
         db.session.commit()
-        return jsonify({'message':'success'})
+        return jsonify({'message':'Book has been added successfully'})
     except IntegrityError as e:
         db.session.rollback()
         return jsonify({'error':'Insertion failed {}'.format(str(e))}),500

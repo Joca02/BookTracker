@@ -8,7 +8,7 @@ from sqlalchemy import text
 def AddReview():
     data=request.get_json()
     idBook=data['idBook']
-    idUser=session['idUser']
+    idUser=data['idUser']
     rating=data['rating']
     reviewText=data['reviewText']
     if not idBook or not idUser or not rating or not reviewText:
