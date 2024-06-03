@@ -7,6 +7,7 @@ const TableBooks=()=>{
 
     const [books,setBooks]=useState([])
     const [openAddBook,setOpenAddBook]=useState(false)
+    const [filterTitle,setFilterTitle]=useState('')
     const styles={
         'color':'white'
     }
@@ -36,6 +37,15 @@ const TableBooks=()=>{
         fetchBooks();
       }, [])
 
+      const filterBooks=async (title)=>{
+        console.log(title)
+        const response = await axios.get('http://127.0.0.1:5000/filter-books',{
+          params: { title }
+      });
+        setBooks(response.data);
+
+      }
+
     return(
         <TableContainer component={Paper} sx={{ maxWidth: 1100,maxHeight:700 }}>
           <AddBookModal open={openAddBook} handleClose={e=>setOpenAddBook(false)} styles={modalStyle} setBooks={setBooks}/>
@@ -48,7 +58,14 @@ const TableBooks=()=>{
 
               
               <TableCell align="center"  sx={styles}>Search 
-                  <Input type="text" sx={{ backgroundColor: 'white',ml:2 }} ></Input>
+                  <Input type="text" sx={{ backgroundColor: 'white',ml:2 }}
+                  // value={filterTitle}
+                  onChange={e=>{
+                    //setFilterTitle(e.target.value)
+                    filterBooks(e.target.value)
+
+                  }}
+                  ></Input>
               </TableCell>
               <TableCell align='center'>
                 <Button
