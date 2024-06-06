@@ -1,5 +1,5 @@
 from config import app,db
-from models import Book_User,Review
+from models import Book_User,Review,Book
 from flask import jsonify,request,session
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import text
@@ -42,3 +42,34 @@ def EditReview():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'An error occurred: {}'.format(str(e))}), 500
+    
+@app.route('/check-review/<int:idUser>/<int:idBook>',methods=['GET'])
+def CheckReview(idUser,idBook):
+     response= Review.query.filter_by(idUser=idUser,idBook=idBook).count()>0
+     return jsonify({'isReviewed':response})
+
+@app.route('/get-review-info',methods=['POST'])
+def GetReviewInfo():
+     print("****************************")
+     print(request.get_json())
+     
+     data=request.get_json()
+     if not data:
+        print("Error: No data received")
+        return jsonify({"error": "No data received"}), 400
+     print("Received data:", data)
+     idBook=data['idBook']
+     idUser=data['idUser']
+     review=Review.query.filter_by(idUser=idUser,idBook=idBook).first()
+     
+     if not review:
+          return jsonify({"error":"Review not found"}),400
+     title=Book.query.filter_by(idBook=idBook).first().title
+     return jsonify({
+          "title":title,
+          "rating":review.rating,
+          "reviewText":review.reviewText
+     })
+
+   
+

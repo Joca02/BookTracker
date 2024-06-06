@@ -1,0 +1,6 @@
+.star{
+    cursor: pointer;
+}
+input[type=radio]{
+    display: none;
+}

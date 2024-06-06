@@ -3,7 +3,7 @@ import { useState,useEffect } from 'react';
 import axios from 'axios';
 import RowBook from './RowBook';
 import AddBookModal from './AddBookModal';
-const TableBooks=()=>{
+const TableBooks=({idUser,homeView})=>{
 
     const [books,setBooks]=useState([])
     const [openAddBook,setOpenAddBook]=useState(false)
@@ -34,16 +34,34 @@ const TableBooks=()=>{
             console.error("There was an error fetching the books!", error);
           }
         }  
-        fetchBooks();
+        const fetchLibaryBooks=async()=>{
+          try {
+            const response = await axios.get('http://127.0.0.1:5000/get-books-by-user/'+idUser);
+            setBooks(response.data);
+            console.log(response.data)
+          } catch (error) {
+            console.error("There was an error fetching the books!", error);
+          }
+        }
+        homeView?fetchBooks():fetchLibaryBooks();////if homeview
       }, [])
 
       const filterBooks=async (title)=>{
         console.log(title)
-        const response = await axios.get('http://127.0.0.1:5000/filter-books',{
-          params: { title }
-      });
-        setBooks(response.data);
-
+        if (homeView)
+            {
+              const response = await axios.get('http://127.0.0.1:5000/filter-books',{
+                params: { title }
+            });
+              setBooks(response.data);
+          }
+          else{
+            const response = await axios.get('http://127.0.0.1:5000/filter-books-by-user', {
+              params: { title, idUser }
+          });
+              setBooks(response.data);
+          }
+        
       }
 
     return(
@@ -67,17 +85,20 @@ const TableBooks=()=>{
                   }}
                   ></Input>
               </TableCell>
-              <TableCell align='center'>
-                <Button
-                variant='outlined'
-                onClick={e=>setOpenAddBook(true)}
-              ><Typography variant='button'>Add a Book</Typography>
-              </Button>
-              </TableCell>
+              {homeView?
+                <TableCell align='center'>
+                    <Button
+                    variant='outlined'
+                    onClick={e=>setOpenAddBook(true)}
+                  ><Typography variant='button'>Add a Book</Typography>
+                  </Button>
+                </TableCell>
+              :<TableCell></TableCell>}
+             
             </TableRow>
           </TableHead>
           <TableBody>
-            {books.map((b,index)=><RowBook key={b.idBook} book={b} index={index}/>)}
+            {books.map((b,index)=><RowBook key={b.idBook} book={b} index={index} idUser={idUser} homeView={homeView}/>)}
           </TableBody>
         </Table>
       </TableContainer>

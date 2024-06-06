@@ -1,6 +1,6 @@
 
 from config import app,db
-from models import Book,Author
+from models import Book,Author,Book_User
 from flask import jsonify,request
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import text
@@ -47,7 +47,22 @@ def addBook():
         return jsonify({'error':'Insertion failed {}'.format(str(e))}),500
     
     
+@app.route('/filter-books',methods=['GET'])
+def FilterBooks():
+    partialTitle = request.args.get('title', '')
+    books = Book.query.filter(Book.title.like(f'%{partialTitle}%')).all()
+    list = [book.to_json() for book in books]
+    return jsonify(list)
 
 
 
-
+@app.route('/filter-books-by-user', methods=['GET'])
+def FilterBooksByUser():
+    partialTitle = request.args.get('title', '')
+    idUser = request.args.get('idUser', type=int)
+    
+    books = db.session.query(Book).join(Book_User, Book.idBook == Book_User.idBook) \
+        .filter(Book.title.like(f'%{partialTitle}%'), Book_User.idUser == idUser).all()
+    
+    list = [book.to_json() for book in books]
+    return jsonify(list)

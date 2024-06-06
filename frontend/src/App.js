@@ -4,6 +4,7 @@ import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import { useState, useEffect } from 'react';
+import Libary from './Libary';
 
 function App() {
   const [session, setSession] = useState(() => JSON.parse(localStorage.getItem('session')) || false);
@@ -23,6 +24,7 @@ function App() {
           <Route path='/' element={<Login session={session} setSession={setSession} setIdUsr={setIdUsr} setUsr={setUsr} />} />
           <Route path='/register' element={<Register />} />
           <Route path='/home' element={<Home session={session} setSession={setSession} usr={usr} idUsr={idUsr} />} />
+          <Route path='/my-library' element={<Libary session={session} setSession={setSession} usr={usr} idUsr={idUsr}/>}/>
         </Routes>
       </BrowserRouter>
     </div>
