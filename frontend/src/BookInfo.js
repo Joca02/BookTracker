@@ -1,4 +1,4 @@
-import { Box, Modal } from "@mui/material"
+import { Box, Modal, Typography } from "@mui/material"
 
 const BookInfo=({style,book,open,handleClose})=>{
 
@@ -12,7 +12,7 @@ const BookInfo=({style,book,open,handleClose})=>{
                 <h2>{book.title}</h2>
                 <h3>by {book.author.name+' '+book.author.lastName}</h3>
                 <p>Page count: {book.pageCount}</p>
-                <p>Description: {book.description}</p>
+                <p><u>Description:</u> <Typography>{book.description}</Typography></p>
             </Box>
             
         </Modal>

@@ -3,7 +3,7 @@ import { useState,useEffect } from 'react';
 import axios from 'axios';
 import RowBook from './RowBook';
 import AddBookModal from './AddBookModal';
-const TableBooks=({idUser,homeView})=>{
+const TableBooks=({idUser,homeView,refreshPageCount})=>{
 
     const [books,setBooks]=useState([])
     const [openAddBook,setOpenAddBook]=useState(false)
@@ -98,7 +98,7 @@ const TableBooks=({idUser,homeView})=>{
             </TableRow>
           </TableHead>
           <TableBody>
-            {books.map((b,index)=><RowBook key={b.idBook} book={b} index={index} idUser={idUser} homeView={homeView}/>)}
+            {books.map((b,index)=><RowBook key={b.idBook} book={b} index={index} idUser={idUser} homeView={homeView} refreshPageCount={refreshPageCount}/>)}
           </TableBody>
         </Table>
       </TableContainer>

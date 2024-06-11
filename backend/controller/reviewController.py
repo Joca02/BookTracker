@@ -3,6 +3,7 @@ from models import Book_User,Review,Book
 from flask import jsonify,request,session
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import text
+from functools import reduce
 
 @app.route('/add-review',methods=['POST'])
 def AddReview():
@@ -49,10 +50,7 @@ def CheckReview(idUser,idBook):
      return jsonify({'isReviewed':response})
 
 @app.route('/get-review-info',methods=['POST'])
-def GetReviewInfo():
-     print("****************************")
-     print(request.get_json())
-     
+def GetReviewInfo():  
      data=request.get_json()
      if not data:
         print("Error: No data received")
@@ -70,6 +68,20 @@ def GetReviewInfo():
           "rating":review.rating,
           "reviewText":review.reviewText
      })
+
+
+
+@app.route('/total-page-count-reviewed', methods=['GET'])
+def total_page_count_reviewed():
+    idUser = request.args.get('idUser', type=int)
+    print(idUser)
+    print("*******************")
+    reviews = Review.query.filter_by(idUser=idUser).all()
+    book_ids = list(map(lambda review: review.idBook, reviews))
+    books = Book.query.filter(Book.idBook.in_(book_ids)).all()
+    total_pages = reduce(lambda acc, book: acc + book.pageCount, books, 0)
+    return jsonify({'totalPageCount': total_pages})
+
 
    
 

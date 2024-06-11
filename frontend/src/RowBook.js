@@ -5,15 +5,14 @@ import AddReviewModal from "./AddReviewModal";
 import axios from "axios";
 import ReviewModal from "./ReviewModal";
 
-const RowBook = ({ book, index, idUser, homeView }) => {
+const RowBook = ({ book, index, idUser, homeView, refreshPageCount }) => {
     const [openInfoModal, setOpenInfoModal] = useState(false);
     const [openReviewModal, setOpenReviewModal] = useState(false);
-    const [openReviewed,setOpenReviewed]=useState(false)
+    const [openReviewed, setOpenReviewed] = useState(false);
     const [isInLibary, setIsInLibary] = useState(false);
     const [isReviewed, setIsReviewed] = useState(false);
     const [reviewData, setReviewData] = useState(null);
     const styles = { width: '50%' };
-
 
     const modalStyle = {
         position: 'absolute',
@@ -26,6 +25,7 @@ const RowBook = ({ book, index, idUser, homeView }) => {
         boxShadow: 24,
         p: 4,
     };
+
     useEffect(() => {
         const checkLibary = async () => {
             let data = {
@@ -117,48 +117,50 @@ const RowBook = ({ book, index, idUser, homeView }) => {
                             idUser={idUser}
                             setIsReviewed={setIsReviewed}
                             setReviewData={setReviewData}
+                            refreshPageCount={refreshPageCount}
+                            bookTitle={book.title} 
             />
 
             <TableCell align="center" sx={styles}><Typography>{book.title}</Typography></TableCell>
             <TableCell align="center" sx={styles}><Typography>{book.author.name + ' ' + book.author.lastName}</Typography></TableCell>
             <TableCell align="center" sx={styles}><Typography>{book.pageCount}</Typography></TableCell>
 
-            <TableCell align="center" sx={styles} >
+            <TableCell align="center" sx={styles}>
                 <Button onClick={() => setOpenInfoModal(true)} variant="outlined">
                     More Info
                 </Button>
             </TableCell>
-            <TableCell align="center" sx={styles} >
-                <Typography> {
-                    homeView ?
-                        isInLibary ?
-                            <Button variant="outlined" color="error" onClick={removeFromLibary}>
-                                Remove from libary
-                            </Button>
+            <TableCell align="center" sx={styles}>
+                <Typography>
+                    {
+                        homeView ?
+                            isInLibary ?
+                                <Button variant="outlined" color="error" onClick={removeFromLibary}>
+                                    Remove from libary
+                                </Button>
+                                :
+                                <Button variant="outlined" color="success" onClick={addToLibary}>
+                                    Add to libary
+                                </Button>
                             :
-                            <Button variant="outlined" color="success" onClick={addToLibary}>
-                                Add to libary
-                            </Button>
-                        :
-                        isReviewed ?
-                            <div>
-
-                    <Button onClick={() => setOpenReviewed(true)} variant="outlined" color="secondary">
-                    View Review
-                    
-                </Button>
-                <ReviewModal
-                    open={openReviewed}
-                    handleClose={() => setOpenReviewed(false)}
-                    reviewData={reviewData}
-                    style={modalStyle}
-        />
-                            </div>
-                            :
-                            <Button color="success" variant="outlined" onClick={() => setOpenReviewModal(true)}>
-                                Add Review
-                            </Button>
-                }</Typography>
+                            isReviewed ?
+                                <div>
+                                    <Button onClick={() => setOpenReviewed(true)} variant="outlined" color="secondary">
+                                        View Review
+                                    </Button>
+                                    <ReviewModal
+                                        open={openReviewed}
+                                        handleClose={() => setOpenReviewed(false)}
+                                        reviewData={reviewData}
+                                        style={modalStyle}
+                                    />
+                                </div>
+                                :
+                                <Button color="success" variant="outlined" onClick={() => setOpenReviewModal(true)}>
+                                    Add Review
+                                </Button>
+                    }
+                </Typography>
             </TableCell>
         </TableRow>
     );

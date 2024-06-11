@@ -9,8 +9,9 @@ from sqlalchemy import text
 @app.route('/get-all-books',methods=['GET'])
 def getAllBooks():
     books=Book.query.all()
-    list=[book.to_json() for book in books]
-    return jsonify(list)
+    listB = list(map(lambda book: book.to_json(), books))
+    print(listB)
+    return jsonify(listB)
 
 @app.route('/get-all-books/<int:idAuthor>',methods=['GET'])
 def getBooksByAuthor(idAuthor):
@@ -50,9 +51,11 @@ def addBook():
 @app.route('/filter-books',methods=['GET'])
 def FilterBooks():
     partialTitle = request.args.get('title', '')
-    books = Book.query.filter(Book.title.like(f'%{partialTitle}%')).all()
-    list = [book.to_json() for book in books]
-    return jsonify(list)
+    books = Book.query.all()
+    filtered_books = list(filter(lambda book: partialTitle.lower() in book.title.lower(), books))
+    listB = list(map(lambda book: book.to_json(), filtered_books))
+    return jsonify(listB)
+
 
 
 

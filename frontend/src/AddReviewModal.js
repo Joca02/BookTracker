@@ -4,7 +4,7 @@ import axios from 'axios';
 import StarRating from './StarRating';
 import './StarRating.css';
 
-const AddReviewModal = ({ open, handleClose, idBook, idUser, setIsReviewed, setReviewData }) => {
+const AddReviewModal = ({ open, handleClose, idBook, idUser, setIsReviewed, setReviewData, refreshPageCount, bookTitle }) => {
     const [rating, setRating] = useState(null);
     const [reviewText, setReviewText] = useState('');
 
@@ -33,10 +33,11 @@ const AddReviewModal = ({ open, handleClose, idBook, idUser, setIsReviewed, setR
             alert(response.data['message']);
             setIsReviewed(true);
             setReviewData({
-                title: "Review Title",  // Replace with actual title if available
+                title: bookTitle,  // Use the actual book title here
                 rating: rating,
                 reviewText: reviewText
             });
+            refreshPageCount();
             handleClose();
         } catch (error) {
             console.error("Error adding review:", error);
